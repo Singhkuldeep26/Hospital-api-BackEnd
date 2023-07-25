@@ -53,4 +53,38 @@ module.exports.createReport= async(req,res,next)=>{
     }
 }
 
+module.exports.all_Report= async(req,res,next)=>{
+    try {
+        const patient= await Patient.findById(req.params.id);
+        
+        res.status(200).json({
+            success:true,
+            reports:patient.reports
+        }) 
+    } catch (error) {
+        res.status(500).json({
+            success:false,
+            message:'Could not able to fetch the patient report'
+        })
+    }
+}
+
+module.exports.AllReports= async(req,res,next)=>{
+    try {
+        const patient= await Patient.find({
+            reports:{$elemMatch:{status:req.params.status} },
+        });
+        
+        res.status(200).json({
+            success:true,
+            data:patient,
+        }) 
+    } catch (error) {
+        res.status(500).json({
+            success:false,
+            message:'Could not able to fetch the reports'
+        })
+    }
+}
+
 
